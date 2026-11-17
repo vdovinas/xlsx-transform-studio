@@ -1,0 +1,1153 @@
+[
+  {
+    "name": "Сбербанк",
+    "headerRow": 1,
+    "sheetName": "Результат",
+    "matchAll": true,
+    "filters": [
+      {
+        "source": "Операции по счету: Назначение платежа",
+        "operator": "NOT_CONTAINS",
+        "value": "Пополнение расчетного счета",
+        "ignoreCase": true
+      },
+      {
+        "source": "Операции по счету: Назначение платежа",
+        "operator": "NOT_CONTAINS",
+        "value": "Пени",
+        "ignoreCase": true
+      }
+    ],
+    "fields": [
+      {
+        "name": "Дата",
+        "source": "Операции по счету: Дата операции",
+        "kind": "DATE",
+        "steps": [],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Номер",
+        "source": "Операции по счету: Номер расчетного документа",
+        "kind": "TEXT",
+        "steps": [],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Контрагент",
+        "source": "Операции по счету: Наименование корреспондента",
+        "kind": "TEXT",
+        "steps": [],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Назначение платежа",
+        "source": "Операции по счету: Назначение платежа",
+        "kind": "TEXT",
+        "steps": [
+          {
+            "action": "CLASSIFY",
+            "argument": "",
+            "replacement": "",
+            "conditions": [],
+            "matchAll": true,
+            "cases": [
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Сумма платежа по дебету",
+                    "operator": "EMPTY",
+                    "value": "",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Комиссия по эквайрингу"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "кредиторская задолженность",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Кредиторская задолженность"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за товар",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата по договору",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за хлеб",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за майонез",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за молочку",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за продукты питания",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "плата за пакет",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за услуги",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "охрана объекта",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "плата за негативное",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "плата за водопотребление",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "услуги интернет",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за тк",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "обращение с тко",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "тепловая энергия",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата по счету за дезинсекцию",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "плата за сброс сточных вод",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за электроэнергию",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "аванс за электроэнергию",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата патента",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "штраф",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "ндфл",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "страховые взносы",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "фиксированные взносы",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "налог на имущество",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "земельный налог",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "транспортный налог",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "комиссия в другие банки",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги Сбербанк"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "комиссия внутри сбербанка",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги Сбербанк"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "комиссия за прием наличных денежных",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги Сбербанк"
+              }
+            ]
+          }
+        ],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Доходы",
+        "source": "",
+        "kind": "NUMBER",
+        "steps": [],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Расходы",
+        "source": "Операции по счету: Сумма платежа по дебету",
+        "kind": "NUMBER",
+        "steps": [
+          {
+            "action": "IF_EMPTY_SOURCE",
+            "argument": "Операции по счету: Назначение платежа",
+            "replacement": "",
+            "conditions": [],
+            "matchAll": true,
+            "cases": []
+          },
+          {
+            "action": "EXTRACT",
+            "argument": "комисси[яи]:\\s*([0-9]+(?:[.,][0-9]+)?)",
+            "replacement": "",
+            "conditions": [
+              {
+                "source": "Операции по счету: Сумма платежа по дебету",
+                "operator": "EMPTY",
+                "value": "",
+                "ignoreCase": true
+              }
+            ],
+            "matchAll": true,
+            "cases": []
+          }
+        ],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Адрес",
+        "source": "",
+        "kind": "TEXT",
+        "steps": [
+          {
+            "action": "CLASSIFY",
+            "argument": "",
+            "replacement": "",
+            "conditions": [],
+            "matchAll": true,
+            "cases": [
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "CONTAINS",
+                    "value": "пушкина,10",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "пушкина,10"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Операции по счету: Назначение платежа",
+                    "operator": "CONTAINS",
+                    "value": "комсомольский,16",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "комсомольский,16"
+              }
+            ]
+          }
+        ],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Оригинальное назначение платежа",
+        "source": "Операции по счету: Назначение платежа",
+        "kind": "TEXT",
+        "steps": [],
+        "required": false,
+        "format": ""
+      }
+    ]
+  },
+  {
+    "name": "Касса — доходы",
+    "headerRow": 1,
+    "sheetName": "Результат",
+    "matchAll": true,
+    "filters": [
+      {
+        "source": "Контрагент",
+        "operator": "NOT_CONTAINS",
+        "value": "Прочие издержки",
+        "ignoreCase": true
+      }
+    ],
+    "fields": [
+      {
+        "name": "Дата",
+        "source": "Дата документа",
+        "kind": "DATE",
+        "steps": [],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Номер",
+        "source": "Номер документа",
+        "kind": "TEXT",
+        "steps": [],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Контрагент",
+        "source": "Контрагент",
+        "kind": "TEXT",
+        "steps": [],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Назначение платежа",
+        "source": "",
+        "kind": "TEXT",
+        "steps": [
+          {
+            "action": "CONSTANT",
+            "argument": "Торговая выручка",
+            "replacement": "",
+            "conditions": [],
+            "matchAll": true,
+            "cases": []
+          }
+        ],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Доходы",
+        "source": "Сумма документа",
+        "kind": "NUMBER",
+        "steps": [],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Расходы",
+        "source": "",
+        "kind": "NUMBER",
+        "steps": [],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Адрес",
+        "source": "",
+        "kind": "TEXT",
+        "steps": [],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Оригинальное назначение платежа",
+        "source": "",
+        "kind": "TEXT",
+        "steps": [],
+        "required": false,
+        "format": ""
+      }
+    ]
+  },
+  {
+    "name": "Касса — расходы",
+    "headerRow": 1,
+    "sheetName": "Результат",
+    "matchAll": true,
+    "filters": [
+      {
+        "source": "Контрагент",
+        "operator": "NOT_CONTAINS",
+        "value": "Прочие издержки",
+        "ignoreCase": true
+      }
+    ],
+    "fields": [
+      {
+        "name": "Дата",
+        "source": "Дата документа",
+        "kind": "DATE",
+        "steps": [],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Номер",
+        "source": "Номер документа",
+        "kind": "TEXT",
+        "steps": [],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Контрагент",
+        "source": "Контрагент",
+        "kind": "TEXT",
+        "steps": [],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Назначение платежа",
+        "source": "",
+        "kind": "TEXT",
+        "steps": [
+          {
+            "action": "CONSTANT",
+            "argument": "Оплата за товар",
+            "replacement": "",
+            "conditions": [],
+            "matchAll": true,
+            "cases": []
+          }
+        ],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Доходы",
+        "source": "",
+        "kind": "NUMBER",
+        "steps": [],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Расходы",
+        "source": "Сумма документа",
+        "kind": "NUMBER",
+        "steps": [],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Адрес",
+        "source": "",
+        "kind": "TEXT",
+        "steps": [],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Оригинальное назначение платежа",
+        "source": "",
+        "kind": "TEXT",
+        "steps": [],
+        "required": false,
+        "format": ""
+      }
+    ]
+  },
+  {
+    "name": "Точка",
+    "headerRow": 1,
+    "sheetName": "Результат",
+    "matchAll": true,
+    "filters": [
+      {
+        "source": "Назначение платежа",
+        "operator": "NOT_CONTAINS",
+        "value": "пени",
+        "ignoreCase": true
+      }
+    ],
+    "fields": [
+      {
+        "name": "Дата",
+        "source": "Дата документа",
+        "kind": "DATE",
+        "steps": [],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Номер",
+        "source": "Номер документа",
+        "kind": "TEXT",
+        "steps": [],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Контрагент",
+        "source": "Наименование получателя",
+        "kind": "TEXT",
+        "steps": [
+          {
+            "action": "CONSTANT",
+            "argument": "Точка ПАО Банка \"ФК Открытие\"",
+            "replacement": "",
+            "conditions": [
+              {
+                "source": "Направление",
+                "operator": "NOT_EQUALS",
+                "value": "Исходящий",
+                "ignoreCase": true
+              }
+            ],
+            "matchAll": true,
+            "cases": []
+          }
+        ],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Назначение платежа",
+        "source": "Назначение платежа",
+        "kind": "TEXT",
+        "steps": [
+          {
+            "action": "CLASSIFY",
+            "argument": "",
+            "replacement": "",
+            "conditions": [],
+            "matchAll": true,
+            "cases": [
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Направление",
+                    "operator": "NOT_EQUALS",
+                    "value": "Исходящий",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Комиссия по эквайрингу"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за товар",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "предоплата за товар",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата по договору",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за продукты питания",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за майонез",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "покупка товара",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за хлеб",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за молочку",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Оплата за товар"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата лицензионного вознаграждения",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги Точка банк"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "комиссия за перевод",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги Точка банк"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "услуги аоп",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "обращение с тко",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата по счету",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за охрану",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за аренду",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за э/энергию",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "оплата за услуги",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Услуги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "взносы в фсс",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "ндфл",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "страховые взносы",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              },
+              {
+                "matchAll": true,
+                "conditions": [
+                  {
+                    "source": "Назначение платежа",
+                    "operator": "STARTS_WITH",
+                    "value": "усн",
+                    "ignoreCase": true
+                  }
+                ],
+                "value": "Налоги"
+              }
+            ]
+          }
+        ],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Доходы",
+        "source": "",
+        "kind": "NUMBER",
+        "steps": [],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Расходы",
+        "source": "Сумма операции",
+        "kind": "NUMBER",
+        "steps": [
+          {
+            "action": "CONSTANT",
+            "argument": "",
+            "replacement": "",
+            "conditions": [
+              {
+                "source": "Направление",
+                "operator": "NOT_EQUALS",
+                "value": "Исходящий",
+                "ignoreCase": true
+              }
+            ],
+            "matchAll": true,
+            "cases": []
+          },
+          {
+            "action": "IF_EMPTY_SOURCE",
+            "argument": "Назначение платежа",
+            "replacement": "",
+            "conditions": [
+              {
+                "source": "Направление",
+                "operator": "NOT_EQUALS",
+                "value": "Исходящий",
+                "ignoreCase": true
+              }
+            ],
+            "matchAll": true,
+            "cases": []
+          },
+          {
+            "action": "EXTRACT",
+            "argument": "сумма комиссии\\s*([0-9]+(?:[.,][0-9]+)?)",
+            "replacement": "",
+            "conditions": [
+              {
+                "source": "Направление",
+                "operator": "NOT_EQUALS",
+                "value": "Исходящий",
+                "ignoreCase": true
+              }
+            ],
+            "matchAll": true,
+            "cases": []
+          }
+        ],
+        "required": true,
+        "format": ""
+      },
+      {
+        "name": "Адрес",
+        "source": "",
+        "kind": "TEXT",
+        "steps": [],
+        "required": false,
+        "format": ""
+      },
+      {
+        "name": "Оригинальное назначение платежа",
+        "source": "Назначение платежа",
+        "kind": "TEXT",
+        "steps": [],
+        "required": false,
+        "format": ""
+      }
+    ],
+    "filterGroups": [
+      {
+        "matchAll": false,
+        "conditions": [
+          {
+            "source": "Направление",
+            "operator": "EQUALS",
+            "value": "Исходящий",
+            "ignoreCase": true
+          },
+          {
+            "source": "Назначение платежа",
+            "operator": "CONTAINS",
+            "value": "сумма комиссии",
+            "ignoreCase": true
+          }
+        ]
+      }
+    ]
+  }
+]

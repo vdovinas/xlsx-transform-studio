@@ -1,0 +1,20 @@
+{
+  "name": "xlsx-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Локальный конструктор правил обработки XLSX",
+  "author": "XLSX Studio",
+  "scripts": {
+    "start": "tauri dev",
+    "test": "node --test desktop/test/*.test.cjs",
+    "test:ui": "node desktop/test/profiles.cjs && node desktop/test/render.cjs",
+    "test:native": "cargo test --manifest-path src-tauri/Cargo.toml",
+    "package": "tauri build --bundles nsis",
+    "portable": "tauri build --no-bundle",
+    "test:tauri": "node desktop/test/native.cjs"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0",
+    "playwright": "^1.56.0"
+  }
+}

@@ -1,0 +1,10 @@
+target/
+dist/
+tools/
+*.log
+node_modules/
+release/
+.idea/
+
+src-tauri/target/
+src-tauri/gen/

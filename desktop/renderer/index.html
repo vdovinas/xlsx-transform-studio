@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src ipc: http://ipc.localhost; object-src 'none'; base-uri 'none'; frame-src 'none'">
+  <title>XLSX Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="bridge.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-symbol" aria-hidden="true">X</span><div>XLSX Studio<small>Обработка таблиц</small></div></div>
+    <nav aria-label="Разделы приложения">
+      <button data-tab="file"><span aria-hidden="true">▤</span> Общие</button>
+      <button data-tab="fields"><span aria-hidden="true">⇄</span> Выходные поля <b id="field-count">0</b></button>
+      <button data-tab="filters"><span aria-hidden="true">≡</span> Фильтры строк <b id="filter-count">0</b></button>
+    </nav>
+  </aside>
+  <div class="workspace">
+    <header class="toolbar">
+      <div class="toolbar-title">XLSX Studio</div>
+      <button class="settings-toggle" data-action="settings" aria-label="Настройки профиля" title="Настройки профиля" aria-expanded="false"><span aria-hidden="true">⚙</span></button>
+      <button class="settings-back" data-action="close-settings">Вернуться к преобразованию</button>
+      <span id="draft-status" role="status"></span>
+      <div class="toolbar-actions"><button data-action="undo" id="undo" title="Отменить последнее изменение структуры">Отменить изменение</button><button data-action="save-profile">Сохранить <kbd>Ctrl S</kbd></button></div>
+    </header>
+    <main id="content"></main>
+    <section id="notice" class="notice" aria-live="polite" hidden></section>
+    <footer class="footer">
+      <div class="footer-state"><strong id="status">Выберите файл</strong><progress id="progress" max="100000" value="0" hidden></progress></div>
+      <button id="cancel" data-action="cancel" hidden>Отменить обработку</button>
+      <button id="reveal" data-action="reveal" hidden>Показать файл</button>
+      <button class="primary export" id="export" data-action="export">Преобразовать и сохранить XLSX</button>
+    </footer>
+  </div>
+</body>
+</html>

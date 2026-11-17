@@ -1,0 +1,108 @@
+const { chromium } = require('playwright');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const { pathToFileURL } = require('node:url');
+const assert = require('node:assert/strict');
+(async () => {
+  const browser = await chromium.launch({ channel: 'msedge', headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1380, height: 900 } });
+    const profiles = JSON.parse(await fs.readFile(path.resolve('src/main/resources/profiles.json'), 'utf8'));
+    let saved, writes = 0, failSave = false;
+    await page.exposeFunction('boot', () => saved || { profiles, draft: { ...profiles[0], sheetName: 'Черновик' } });
+    await page.exposeFunction('save', value => { if (failSave) throw Error('Ошибка записи'); saved = value; writes++; });
+    await page.addInitScript(() => { window.studio = { bootstrap: window.boot, saveProfiles: window.save, confirmProfileDeletion: async name => window.confirm('Удалить профиль «' + name + '»? Это действие нельзя отменить.'), onProgress() {}, onClosing() {} }; });
+    const errors = []; page.on('pageerror', error => errors.push(error.message));
+    const url = pathToFileURL(path.resolve('desktop/renderer/index.html')).href;
+    await page.goto(url);
+    await page.locator('[data-action=settings]').click();
+    assert.equal(await page.locator('[data-path=sheetName]').inputValue(), 'Черновик');
+    assert.equal(await page.locator('[data-action=load-profile]').count(), 0);
+    const name = await page.locator('[data-path=name]').inputValue();
+    await page.locator('[data-action=copy-profile]').click();
+    await page.waitForFunction(() => state.profile.name.endsWith(' 2'));
+    assert.equal(await page.locator('[data-path=name]').inputValue(), name + ' 2');
+    await page.locator('[data-action=copy-profile]').click();
+    await page.waitForFunction(() => state.profile.name.endsWith(' 2 2'));
+    await page.locator('#profile-select').selectOption('0');
+    await page.waitForFunction(() => state.active === 0);
+    await page.locator('[data-action=copy-profile]').click();
+    await page.waitForFunction(() => state.profile.name.endsWith(' 3'));
+    const before = writes;
+    await page.locator('[data-path=name]').fill(' ' + name.toLowerCase() + ' ');
+    await page.locator('[data-action=save-profile]').click();
+    assert.match(await page.locator('#draft-status').textContent(), /уже существует/);
+    assert.equal(writes, before);
+    await page.locator('#profile-select').selectOption('0');
+    assert.equal(await page.locator('#profile-select').inputValue(), String(profiles.length + 2));
+    await page.locator('[data-path=name]').fill('   ');
+    await page.locator('[data-action=save-profile]').click();
+    assert.match(await page.locator('#draft-status').textContent(), /Введите название/);
+    await page.locator('[data-path=name]').fill(' Мой профиль ');
+    await page.keyboard.press('Control+s');
+    await page.waitForFunction(() => document.querySelector('#draft-status').textContent === 'Профиль сохранён');
+    assert.equal(saved.profiles[saved.active].name, 'Мой профиль');
+    await page.reload();
+    await page.locator('[data-action=settings]').click();
+    assert.equal(await page.locator('[data-path=name]').inputValue(), 'Мой профиль');
+    await page.locator('[data-action=new-profile]').click();
+    await page.waitForFunction(() => state.profile.fields.length === 0);
+    assert.equal(await page.evaluate(() => state.profile.filters.length), 0);
+    await page.locator('[data-path=name]').fill('Автосохранение');
+    await page.waitForFunction(() => document.querySelector('#draft-status').textContent === 'Профиль сохранён');
+    assert.equal(saved.profiles[saved.active].name, 'Автосохранение');
+    failSave = true;
+    await page.locator('[data-path=name]').fill('Несохранённый профиль');
+    await page.locator('#profile-select').selectOption('0');
+    await page.waitForFunction(() => document.querySelector('#draft-status').textContent === 'Не удалось сохранить профиль');
+    assert.equal(await page.evaluate(() => state.profile.name), 'Несохранённый профиль');
+    assert.notEqual(await page.locator('#profile-select').inputValue(), '0');
+    failSave = false;
+    await page.locator('[data-action=save-profile]').click();
+    await page.waitForFunction(() => document.querySelector('#draft-status').textContent === 'Профиль сохранён');
+    // Deletion can be cancelled, and a failed write must leave the profile intact.
+    let count = await page.locator('#profile-select option').count();
+    page.once('dialog', dialog => dialog.dismiss());
+    await page.locator('[data-action=delete-profile]').click();
+    await page.waitForFunction(() => !state.busy);
+    assert.equal(await page.locator('#profile-select option').count(), count);
+    failSave = true;
+    page.once('dialog', dialog => dialog.accept());
+    await page.locator('[data-action=delete-profile]').click();
+    await page.waitForFunction(() => !state.busy);
+    assert.equal(await page.locator('#profile-select option').count(), count);
+    failSave = false;
+    page.once('dialog', dialog => dialog.accept());
+    await page.locator('[data-action=delete-profile]').click();
+    await page.waitForFunction(n => state.profiles.length === n && !state.busy, count - 1);
+    assert.equal(saved.profiles.length, count - 1);
+    assert.ok(!saved.profiles.some(p => p.name === 'Несохранённый профиль'));
+    await page.reload(); await page.locator('[data-action=settings]').click();
+    assert.equal(await page.locator('#profile-select option').count(), count - 1);
+    for (const width of [1380, 850]) {
+      await page.setViewportSize({ width, height: 900 });
+      const spacing = await page.evaluate(() => {
+        const select = document.querySelector('#profile-select').getBoundingClientRect();
+        const actions = document.querySelector('.profile-actions').getBoundingClientRect();
+        const form = document.querySelector('.form-grid').getBoundingClientRect();
+        return actions.top - select.bottom >= 12 && form.top - actions.bottom >= 12;
+      });
+      assert.ok(spacing, 'Profile actions need clear spacing at width ' + width);
+    }
+    await page.setViewportSize({ width: 1380, height: 900 });
+    await page.screenshot({ path: path.resolve('target/interface-profiles-delete.png') });
+    while (await page.locator('#profile-select option').count() > 1) {
+      const previous = await page.locator('#profile-select option').count();
+      page.once('dialog', dialog => dialog.accept());
+      await page.locator('[data-action=delete-profile]').click();
+      await page.waitForFunction(n => state.profiles.length === n && !state.busy, previous - 1);
+    }
+    assert.ok(await page.locator('[data-action=delete-profile]').isDisabled());
+    await page.reload(); await page.locator('[data-action=settings]').click();
+    assert.equal(await page.locator('#profile-select option').count(), 1);
+    assert.ok(await page.locator('[data-action=delete-profile]').isDisabled());
+    assert.deepEqual(errors, []);
+    await page.screenshot({ path: path.resolve('target/interface-profiles.png') });
+    console.log('Profiles: migration, creation, copy numbering, duplicate/empty names, switching, Ctrl+S, autosave and reload passed.');
+  } finally { await browser.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });
